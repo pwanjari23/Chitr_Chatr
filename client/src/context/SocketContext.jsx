@@ -1,0 +1,67 @@
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import { io } from 'socket.io-client';
+import { AuthContext } from './AuthContext.jsx';
+
+export const SocketContext = createContext();
+
+export const SocketProvider = ({ children }) => {
+  const [socket, setSocket] = useState(null);
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  const { user, token } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user && token) {
+      // Connect to server port 5000 with Auth Token in handshake credentials
+      const socketUrl = window.location.hostname === '127.0.0.1'
+        ? 'http://127.0.0.1:5000'
+        : 'http://localhost:5000';
+
+      const newSocket = io(socketUrl, {
+        auth: { token },
+        transports: ['websocket']
+      });
+
+      setSocket(newSocket);
+
+      newSocket.on('connect', () => {
+        console.log('Successfully connected to WebSockets server');
+      });
+
+      // Handle list of currently online user IDs
+      newSocket.on('get_online_users', (users) => {
+        setOnlineUsers(users);
+      });
+
+      // Handle user online/offline status changes
+      newSocket.on('user_status_changed', ({ userId, isOnline }) => {
+        setOnlineUsers((prev) => {
+          if (isOnline) {
+            if (!prev.includes(userId)) {
+              return [...prev, userId];
+            }
+            return prev;
+          } else {
+            return prev.filter((id) => id !== userId);
+          }
+        });
+      });
+
+      // Cleanup on unmount or authentication state reset
+      return () => {
+        newSocket.close();
+        setSocket(null);
+      };
+    } else {
+      if (socket) {
+        socket.close();
+        setSocket(null);
+      }
+    }
+  }, [user, token]);
+
+  return (
+    <SocketContext.Provider value={{ socket, onlineUsers }}>
+      {children}
+    </SocketContext.Provider>
+  );
+};

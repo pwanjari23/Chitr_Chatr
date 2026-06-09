@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased select-none transition-colors duration-300;
+    background-color: #f8fafc; /* Slate-50 background for Light theme */
+  }
+  .dark body {
+    background-color: #0b0f19; /* Deep Slate-Navy background for Dark theme */
+  }
+}
+
+/* Premium Minimalist Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2); /* Slate-400 with opacity */
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.25);
+}
+
+/* Glassmorphism Panel Utility */
+.glass-panel {
+  @apply backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border border-slate-100/50 dark:border-slate-800/30 shadow-sm;
+}
+
+/* Premium SaaS Message Bubble Styles (Brand accent blue/slate) */
+.saas-bubble-sent {
+  @apply bg-brand-500 text-white rounded-2xl rounded-tr-sm shadow-[0_1px_2px_rgba(77,112,179,0.15)];
+}
+
+.saas-bubble-received {
+  @apply bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-2xl rounded-tl-sm border border-slate-100 dark:border-slate-700/30 shadow-[0_1px_2px_rgba(0,0,0,0.02)];
+}
+
+/* SaaS Hover and Active items on contact sidebar */
+.saas-active-item {
+  @apply bg-slate-50/80 dark:bg-slate-800/40 relative;
+}
+
+/* Active indicator vertical bar */
+.saas-active-item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3.5px;
+  @apply bg-brand-500 rounded-r-md;
+}
+
+/* Typing Indicator bouncing dots */
+@keyframes dot-bounce {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-3.5px);
+    opacity: 1;
+  }
+}
+
+.dot-1 {
+  animation: dot-bounce 1s infinite ease-in-out;
+}
+
+.dot-2 {
+  animation: dot-bounce 1s infinite ease-in-out 0.2s;
+}
+
+.dot-3 {
+  animation: dot-bounce 1s infinite ease-in-out 0.4s;
+}
+
+/* Clean micro-transitions */
+.chat-transition {
+  @apply transition-all duration-200 ease-out;
+}
+
+/* Modern Gradient Pulse Background */
+.gradient-orb-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.gradient-orb-bg::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(77,112,179,0.06) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.gradient-orb-bg::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(77,112,179,0.04) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+
